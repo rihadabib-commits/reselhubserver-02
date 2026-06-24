@@ -53,9 +53,9 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-async function run() {
-  try {
-    await client.connect();
+// async function run() {
+//   try {
+//     await client.connect();
 
     const db = client.db('reselhundb');
     
@@ -621,10 +621,10 @@ app.delete('/products/:id', verifyToken, async (req, res) => {
   res.json(result);
 });
 
-    console.log("Connected to MongoDB -> reselhundb Database!");
-  } finally {}
-}
-run().catch(console.dir);
+//     console.log("Connected to MongoDB -> reselhundb Database!");
+//   } finally {}
+// }
+// run().catch(console.dir);
 
 app.get('/', (req, res) => res.send('ReSell Hub Server Running'));
 app.listen(port, () => console.log(`Server running on port ${port}`));
