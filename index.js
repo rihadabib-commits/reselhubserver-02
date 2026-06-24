@@ -580,14 +580,14 @@ app.get('/products', async (req, res) => {
 
  
 
-// app.get('/api/users', async (req, res) => {
-//     try {
-//         const users = await usersCol.find({ role: { $in: ['buyer', 'seller'] } }).toArray();
-//         res.json(users);
-//     } catch (error) {
-//         res.status(500).json({ error: "Server Error" });
-//     }
-// });
+app.get('/api/users', async (req, res) => {
+    try {
+        const users = await usersCol.find({ role: { $in: ['buyer', 'seller'] } }).toArray();
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: "Server Error" });
+    }
+});
 
 
     // ─── STATS ─────────────────────────────────────────
