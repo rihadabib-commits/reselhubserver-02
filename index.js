@@ -569,12 +569,12 @@ app.delete('/api/products/:id', async (req, res) => {
 });
 
 
-app.get('/products', async (req, res) => {
-    // শুধুমাত্র সেই প্রোডাক্ট দেখাবে যার স্ট্যাটাস 'available'
-    const query = { status: 'available' };
-    const result = await productsCol.find(query).toArray();
-    res.json(result);
-});
+// app.get('/products', async (req, res) => {
+//     // শুধুমাত্র সেই প্রোডাক্ট দেখাবে যার স্ট্যাটাস 'available'
+//     const query = { status: 'available' };
+//     const result = await productsCol.find(query).toArray();
+//     res.json(result);
+// });
 
 
 
