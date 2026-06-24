@@ -627,5 +627,5 @@ app.delete('/products/:id', verifyToken, async (req, res) => {
 run().catch(console.dir);
 
 app.get('/', (req, res) => res.send('ReSell Hub Server Running'));
-.listen(port, () => console.log(`Server running on port ${port}`));
+app.listen(port, () => console.log(`Server running on port ${port}`));
 
