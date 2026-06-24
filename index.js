@@ -563,10 +563,10 @@ app.patch('/api/products/:id/status', async (req, res) => {
 });
 
 // ডিলিট করার জন্য
-app.delete('/api/products/:id', async (req, res) => {
-    const result = await productsCol.deleteOne({ _id: new ObjectId(req.params.id) });
-    res.json(result);
-});
+// app.delete('/api/products/:id', async (req, res) => {
+//     const result = await productsCol.deleteOne({ _id: new ObjectId(req.params.id) });
+//     res.json(result);
+// });
 
 
 app.get('/products', async (req, res) => {
