@@ -40,18 +40,6 @@ const checkNotBlocked = (usersCol) => async (req, res, next) => {
   }
   next();
 };
-// JWT Middleware
-const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) return res.status(401).json({ message: 'Unauthorized' });
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch {
-    return res.status(403).json({ message: 'Forbidden' });
-  }
-};
 
 // async function run() {
 //   try {
@@ -178,8 +166,8 @@ const verifyToken = (req, res, next) => {
       res.json(result);
     });
 
-    // verifyToken middleware সহ রুট
-    app.get('/users', verifyToken, async (req, res) => {
+    
+    app.get('/users', async (req, res) => {
       const result = await usersCol.find().toArray();
       res.json(result);
     });
@@ -189,7 +177,7 @@ const verifyToken = (req, res, next) => {
       res.json(result);
     });
 
-    app.patch('/users/:id', verifyToken, async (req, res) => {
+    app.patch('/users/:id', async (req, res) => {
       const result = await usersCol.updateOne(
         { _id: new ObjectId(req.params.id) },
         { $set: req.body }
@@ -197,7 +185,7 @@ const verifyToken = (req, res, next) => {
       res.json(result);
     });
 
-    app.delete('/users/:id', verifyToken, async (req, res) => {
+    app.delete('/users/:id', async (req, res) => {
       const result = await usersCol.deleteOne({ _id: new ObjectId(req.params.id) });
       res.json(result);
     });
@@ -227,18 +215,18 @@ const verifyToken = (req, res, next) => {
     });
 
     // ─── ORDERS ────────────────────────────────────────
-    app.post('/orders', verifyToken, async (req, res) => {
+    app.post('/orders', async (req, res) => {
       const order = { ...req.body, orderStatus: 'pending', createdAt: new Date() };
       const result = await ordersCol.insertOne(order);
       res.json(result);
     });
 
-    app.get('/orders', verifyToken, async (req, res) => {
+    app.get('/orders', async (req, res) => {
       const result = await ordersCol.find().toArray();
       res.json(result);
     });
 
-    app.get('/my-orders/:email', verifyToken, async (req, res) => {
+    app.get('/my-orders/:email', async (req, res) => {
       const result = await ordersCol.find({ 'buyerInfo.email': req.params.email }).toArray();
       res.json(result);
     });
@@ -505,7 +493,7 @@ app.delete('/api/users/:id', async (req, res) => {
 
 
 // ১. প্রোডাক্ট অ্যাড করার সময় 'pending' থাকবে
-app.post('/products', verifyToken, async (req, res) => {
+app.post('/products', async (req, res) => {
   const product = { ...req.body, status: 'pending', createdAt: new Date() };
   const result = await productsCol.insertOne(product);
   res.json(result);
@@ -609,14 +597,14 @@ app.get('/my-products/:email', async (req, res) => {
 });
 
 // ২. সেলারের প্রোডাক্ট অ্যাড করার জন্য
-app.post('/products', verifyToken, async (req, res) => {
+app.post('/products', async (req, res) => {
   const product = { ...req.body, status: 'available', createdAt: new Date() };
   const result = await productsCol.insertOne(product);
   res.json(result);
 });
 
 // ৩. সেলারের প্রোডাক্ট ডিলিট করার জন্য
-app.delete('/products/:id', verifyToken, async (req, res) => {
+app.delete('/products/:id', async (req, res) => {
   const result = await productsCol.deleteOne({ _id: new ObjectId(req.params.id) });
   res.json(result);
 });
