@@ -16,7 +16,7 @@ const port = process.env.PORT || 5000;
 
 // 🛠️ CORS কনফিগারেশন
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: ['http://localhost:3000', 'https://resellhub-01.vercel.app'],
   credentials: true
 }));
 app.use(express.json());
