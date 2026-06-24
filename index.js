@@ -591,14 +591,14 @@ app.get('/api/users', async (req, res) => {
 
 
     // ─── STATS ─────────────────────────────────────────
-    app.get('/stats', async (req, res) => {
-      const totalUsers = await usersCol.countDocuments();
-      const totalProducts = await productsCol.countDocuments();
-      const totalOrders = await ordersCol.countDocuments();
-      const buyers = await usersCol.countDocuments({ role: 'buyer' });
-      const sellers = await usersCol.countDocuments({ role: 'seller' });
-      res.json({ totalUsers, totalProducts, totalOrders, buyers, sellers });
-    });
+    // app.get('/stats', async (req, res) => {
+    //   const totalUsers = await usersCol.countDocuments();
+    //   const totalProducts = await productsCol.countDocuments();
+    //   const totalOrders = await ordersCol.countDocuments();
+    //   const buyers = await usersCol.countDocuments({ role: 'buyer' });
+    //   const sellers = await usersCol.countDocuments({ role: 'seller' });
+    //   res.json({ totalUsers, totalProducts, totalOrders, buyers, sellers });
+    // });
 
     // ─── নতুন করে যোগ করার জন্য সেলারের রুটসমূহ (বায়ারের কোডে হাত না দিয়ে) ───
 
