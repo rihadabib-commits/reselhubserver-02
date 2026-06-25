@@ -153,7 +153,7 @@ const checkNotBlocked = (usersCol) => async (req, res, next) => {
           productId: orderData.productId,
           productTitle: orderData.title,
           price: Number(orderData.totalPayable),
-          paymentStatus: 'pending',
+          paymentStatus: 'paid',
           orderStatus: 'pending',
           transactionId: orderData.transactionId,
           createdAt: new Date()
