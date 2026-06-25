@@ -86,62 +86,62 @@ const checkNotBlocked = (usersCol) => async (req, res, next) => {
     });
 
     // ২. পেমেন্ট ও অর্ডার কমপ্লিট করার মেইন সিকিউর রুট
-    // app.post('/api/orders', blockCheck,  async (req, res) => {
-    //   try {
-    //     const orderData = req.body;
-        
-    //     const finalPaymentRecord = {
-    //       productId: orderData.productId,
-    //       title: orderData.title,
-    //       price: Number(orderData.price),
-    //       tax: Number(orderData.tax || 0),
-    //       totalPayable: Number(orderData.totalPayable),
-    //       transactionId: orderData.transactionId, // স্ট্রাইপ থেকে আসা ইউনিক ট্রানজেকশন আইডি
-    //       sellerId: orderData.sellerId,
-    //       sellerName: orderData.sellerName,
-    //       sellerEmail: orderData.sellerEmail,
-    //       buyerPhone: orderData.buyerPhone,
-    //       buyerAddress: orderData.buyerAddress,
-    //       buyerEmail: orderData.buyerEmail, 
-    //       paymentStatus: 'Paid',            
-    //       orderStatus: 'Pending',           
-    //       createdAt: new Date()
-    //     };
-
-
-
-    app.post('/api/orders', blockCheck, async (req, res) => {
-    try {
+    app.post('/api/orders', blockCheck,  async (req, res) => {
+      try {
         const orderData = req.body;
         
         const finalPaymentRecord = {
-            productId: orderData.productId,
-            title: orderData.title,
-            price: Number(orderData.price),
-            tax: Number(orderData.tax || 0),
-            totalPayable: Number(orderData.totalPayable),
-            transactionId: orderData.transactionId,
-            sellerId: orderData.sellerId,
-            sellerName: orderData.sellerName,
-            sellerEmail: orderData.sellerEmail,
-            buyerPhone: orderData.buyerPhone,
-            buyerAddress: orderData.buyerAddress,
-            buyerEmail: orderData.buyerEmail, 
-            
-            // নিচের লাইনটি এভাবে পরিবর্তন করো:
-            paymentStatus: orderData.paymentStatus || 'Pending', 
-            orderStatus: orderData.orderStatus || 'Pending', 
-            createdAt: new Date()
+          productId: orderData.productId,
+          title: orderData.title,
+          price: Number(orderData.price),
+          tax: Number(orderData.tax || 0),
+          totalPayable: Number(orderData.totalPayable),
+          transactionId: orderData.transactionId, // স্ট্রাইপ থেকে আসা ইউনিক ট্রানজেকশন আইডি
+          sellerId: orderData.sellerId,
+          sellerName: orderData.sellerName,
+          sellerEmail: orderData.sellerEmail,
+          buyerPhone: orderData.buyerPhone,
+          buyerAddress: orderData.buyerAddress,
+          buyerEmail: orderData.buyerEmail, 
+          paymentStatus: 'pending',            
+          orderStatus: 'Pending',           
+          createdAt: new Date()
         };
 
-        // এরপর বাকি কোড (যেমন: ordersCol.insertOne(...))
-        const result = await ordersCol.insertOne(finalPaymentRecord);
-        res.status(201).json({ success: true, result });
+
+
+//     app.post('/api/orders', blockCheck, async (req, res) => {
+//     try {
+//         const orderData = req.body;
         
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
+//         const finalPaymentRecord = {
+//             productId: orderData.productId,
+//             title: orderData.title,
+//             price: Number(orderData.price),
+//             tax: Number(orderData.tax || 0),
+//             totalPayable: Number(orderData.totalPayable),
+//             transactionId: orderData.transactionId,
+//             sellerId: orderData.sellerId,
+//             sellerName: orderData.sellerName,
+//             sellerEmail: orderData.sellerEmail,
+//             buyerPhone: orderData.buyerPhone,
+//             buyerAddress: orderData.buyerAddress,
+//             buyerEmail: orderData.buyerEmail, 
+            
+//             // নিচের লাইনটি এভাবে পরিবর্তন করো:
+//             paymentStatus: orderData.paymentStatus || 'Pending', 
+//             orderStatus: orderData.orderStatus || 'Pending', 
+//             createdAt: new Date()
+//         };
+
+//         // এরপর বাকি কোড (যেমন: ordersCol.insertOne(...))
+//         const result = await ordersCol.insertOne(finalPaymentRecord);
+//         res.status(201).json({ success: true, result });
+        
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// });
 
         // ক) payments_history কালেকশনে ডাটা পুশ
         const paymentResult = await paymentsHistoryCol.insertOne(finalPaymentRecord);
