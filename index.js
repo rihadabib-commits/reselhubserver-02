@@ -153,7 +153,7 @@ const checkNotBlocked = (usersCol) => async (req, res, next) => {
           productId: orderData.productId,
           productTitle: orderData.title,
           price: Number(orderData.totalPayable),
-          paymentStatus: 'paid',
+          paymentStatus: 'pending',
           orderStatus: 'pending',
           transactionId: orderData.transactionId,
           createdAt: new Date()
@@ -490,26 +490,65 @@ app.get('/api/seller/stats', async (req, res) => {
 
 
 
+// app.patch("/api/orders/:id", async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const { status } = req.body;
+
+//     const result = await ordersCol.updateOne(
+//       { _id: new ObjectId(id) },
+//       {
+//         $set: {
+//           orderStatus: status,
+//         },
+//       }
+//     );
+
+//     res.send(result);
+//   } catch (err) {
+//     res.status(500).send(err);
+//   }
+// });
+
+
 app.patch("/api/orders/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
 
-    const result = await ordersCol.updateOne(
+    const order = await ordersCol.findOne({
+      _id: new ObjectId(id),
+    });
+
+    await ordersCol.updateOne(
       { _id: new ObjectId(id) },
       {
         $set: {
           orderStatus: status,
+          paymentStatus: status === "Accepted" ? "Paid" : "Pending",
         },
       }
     );
 
-    res.send(result);
+    await paymentsHistoryCol.updateOne(
+      {
+        transactionId: order.transactionId,
+      },
+      {
+        $set: {
+          orderStatus: status,
+          paymentStatus: status === "Accepted" ? "Paid" : "Pending",
+        },
+      }
+    );
+
+    res.send({
+      success: true,
+    });
   } catch (err) {
     res.status(500).send(err);
   }
 });
-
 
 app.patch('/api/products/:id', async (req, res) => {
     const id = req.params.id;
