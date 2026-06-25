@@ -418,34 +418,34 @@ app.patch('/api/orders/:id', async (req, res) => {
 });
 
 
-app.patch('/api/orders/:id', async (req, res) => {
-    const id = req.params.id;
-    const { status } = req.body; // ফ্রন্টএন্ড থেকে 'Accepted' বা অন্য কিছু আসছে
+// app.patch('/api/orders/:id', async (req, res) => {
+//     const id = req.params.id;
+//     const { status } = req.body; // ফ্রন্টএন্ড থেকে 'Accepted' বা অন্য কিছু আসছে
 
-    try {
-        const query = { _id: new ObjectId(id) };
+//     try {
+//         const query = { _id: new ObjectId(id) };
         
-        // লজিক: সেলার যখন 'Accepted' করবে, পেমেন্ট পেইড হবে। 
-        // অন্য কোনো স্ট্যাটাস (যেমন Shipped/Delivered) দিলে পেমেন্ট স্ট্যাটাস আগের মতোই থাকবে।
-        const updateDoc = { 
-            $set: { 
-                status: status,
-                paymentStatus: status === 'Accepted' ? 'paid' : 'pending' 
-            } 
-        }; 
+//         // লজিক: সেলার যখন 'Accepted' করবে, পেমেন্ট পেইড হবে। 
+//         // অন্য কোনো স্ট্যাটাস (যেমন Shipped/Delivered) দিলে পেমেন্ট স্ট্যাটাস আগের মতোই থাকবে।
+//         const updateDoc = { 
+//             $set: { 
+//                 status: status,
+//                 paymentStatus: status === 'Accepted' ? 'paid' : 'pending' 
+//             } 
+//         }; 
         
-        const result = await ordersCol.updateOne(query, updateDoc);
+//         const result = await ordersCol.updateOne(query, updateDoc);
         
-        if (result.modifiedCount > 0) {
-            res.json({ success: true, message: "Status and Payment updated successfully" });
-        } else {
-            res.status(400).json({ message: "No changes made to the record" });
-        }
-    } catch (error) {
-        console.error("Update error:", error);
-        res.status(500).json({ error: "Server side error" });
-    }
-});
+//         if (result.modifiedCount > 0) {
+//             res.json({ success: true, message: "Status and Payment updated successfully" });
+//         } else {
+//             res.status(400).json({ message: "No changes made to the record" });
+//         }
+//     } catch (error) {
+//         console.error("Update error:", error);
+//         res.status(500).json({ error: "Server side error" });
+//     }
+// });
 
 
 
