@@ -293,10 +293,20 @@ app.get('/api/seller/total-sales', async (req, res) => {
 });
 
 
-// সব অর্ডার পাওয়ার জন্য
+// সব অর্ডার পাওয়ার জন্য  aita
+// app.get('/api/orders', async (req, res) => {
+//     const orders = await ordersCol.find({}).toArray();
+//     res.json(orders);
+// });
 app.get('/api/orders', async (req, res) => {
-    const orders = await ordersCol.find({}).toArray();
-    res.json(orders);
+  try {
+    const { buyerEmail } = req.query;
+    const query = buyerEmail ? { buyerEmail } : {};
+    const result = await ordersCol.find(query).toArray();
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
 // স্ট্যাটাস আপডেট করার জন্য
@@ -331,6 +341,46 @@ app.patch('/api/orders/:id', async (req, res) => {
 //         res.status(500).json({ error: "Server side error" });
 //     }
 // });
+
+
+
+// ১. অর্ডার সেভ করার সময় (POST /api/orders)
+// বায়ার পেমেন্ট দেওয়ার সময় এটি কল হবে
+app.post('/api/orders', blockCheck, async (req, res) => {
+    try {
+        const orderData = req.body;
+        const newOrder = {
+            ...orderData,
+            orderStatus: 'Pending',    // শুরুতেই Pending
+            paymentStatus: 'Pending',  // পেমেন্ট Pending থাকবে
+            createdAt: new Date()
+        };
+        await ordersCol.insertOne(newOrder);
+        res.status(201).json({ success: true, message: 'Order created with pending status' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// ২. অর্ডার আপডেট করার সময় (PATCH /api/orders/:id)
+// সেলার যখন স্ট্যাটাস 'Accepted' করবে
+app.patch('/api/orders/:id', async (req, res) => {
+    const id = req.params.id;
+    const { status } = req.body; // ফ্রন্টএন্ড থেকে 'Accepted' আসবে
+
+    try {
+        const updateDoc = { 
+            $set: { 
+                orderStatus: status, 
+                paymentStatus: status === 'Accepted' ? 'Paid' : 'Pending' 
+            } 
+        }; 
+        const result = await ordersCol.updateOne({ _id: new ObjectId(id) }, updateDoc);
+        res.json({ success: true, result });
+    } catch (error) {
+        res.status(500).json({ error: "Server error" });
+    }
+});
 
 
 app.patch('/api/orders/:id', async (req, res) => {
